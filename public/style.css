@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap");
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  background-color: #c1ffd7;
+  background-image: url("https://www.transparenttextures.com/patterns/batthern.png");
+  font-family: "Comic Neue", cursive;
+}
+
+.container {
+  background-color: #fcffa6;
+  padding: 30px 40px;
+  min-height: 500px;
+  margin-top: 80px;
+  border-radius: 20px;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.39);
+  background-image: radial-gradient(#bfc0c146 7%, transparent 0);
+  background-size: 25px 25px;
+  width: 350px;
+}
+
+.container h1 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  font-size: 20px;
+}
+
+.item button {
+  background-color: inherit;
+  border: 0;
+  cursor: pointer;
+}
+
+li {
+  margin: 10px;
+  text-align: left;
+  position: relative;
+  cursor: pointer;
+}
+
+input {
+  background-color: inherit;
+  border: none;
+  border-bottom: 3px solid #b5deff;
+  width: 220px;
+}
+
+input:focus {
+  outline: none;
+}
+
+.addItemForm {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
