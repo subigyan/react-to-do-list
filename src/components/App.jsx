@@ -1,34 +1,95 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import InputForm from "./InputForm";
 import TodoItems from "./TodoItems";
-import { v4 as uuidv4 } from "uuid";
+import Footer from "./Footer.jsx";
+import About from "./About";
 
 function App() {
-  const [items, updateItems] = useState([]);
+  const [items, setItems] = useState([]);
 
-  function addItem(item) {
-    updateItems((prev) => [...prev, item]);
+  //useEffect hook
+  useEffect(() => {
+    fetchTasks().then((data) => setItems(data));
+  }, []);
+
+  const fetchTasks = async () => {
+    let res = await fetch("http://localhost:5000/items");
+    let data = await res.json();
+    return data;
+  };
+
+  const fetchTask = async (taskId) => {
+    let res = await fetch(`http://localhost:5000/items/${taskId}`);
+    let data = await res.json();
+    return data;
+  };
+
+  //fetch data form server
+
+  //Add item to the server
+  async function addItem(item) {
+    //post request using  fetch
+    await fetch("http://localhost:5000/items", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(item),
+    });
+    let fetchedData = await fetchTasks();
+    setItems(fetchedData);
   }
 
-  function deleteItem(itemIndex) {
-    updateItems(items.filter((item, index) => index !== itemIndex));
+  async function deleteItem(itemId) {
+    await fetch(`http://localhost:5000/items/${itemId}`, {
+      method: "DELETE",
+    });
+    fetchTasks().then((data) => setItems(data));
+  }
+
+  async function handleToggle(itemId) {
+    // const item = items.find((item) => item.id == itemId);
+    const item = await fetchTask(itemId);
+    const updatedItem = { ...item, isDone: !item.isDone };
+    await fetch(`http://localhost:5000/items/${itemId}`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/JSON",
+      },
+      body: JSON.stringify(updatedItem),
+    });
+    fetchTasks().then((data) => setItems(data));
+    // console.log(updatedList);
+    // setItems(updatedList);
   }
 
   return (
-    <div className="container">
-      <h1>Todo List</h1>
-      <InputForm onAdd={addItem} />
-      <div>
-        {items.map((item, index) => (
-          <TodoItems
-            key={uuidv4()}
-            id={index}
-            onClickDelete={deleteItem}
-            item={item}
+    <Router>
+      <div className="container">
+        <div>
+          <h1>Todo List</h1>
+
+          <Route
+            path="/"
+            exact
+            render={(props) => (
+              <>
+                <InputForm onAdd={addItem} itemList={items} />
+
+                <TodoItems
+                  itemList={items}
+                  onDelete={deleteItem}
+                  onToggle={handleToggle}
+                />
+              </>
+            )}
           />
-        ))}
+        </div>
+        <Route path="/about" component={About} />
+        <Footer />
       </div>
-    </div>
+    </Router>
   );
 }
 

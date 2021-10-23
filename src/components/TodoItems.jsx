@@ -1,41 +1,26 @@
-import React, { useState } from "react";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+import React from "react";
+import TodoItem from "./TodoItem";
+import { v4 as uuidv4 } from "uuid";
 
-function TodoItem(props) {
-  const [clickStatus, setClickStatus] = useState(false);
-
-  function handleClick() {
-    setClickStatus(!clickStatus);
-  }
-
+const TodoItems = ({ itemList: items, onDelete, onToggle }) => {
   return (
-    <div className="item">
-      <li
-        id={props.id}
-        onClick={handleClick}
-        style={{ textDecoration: clickStatus ? "line-through" : null }}
-      >
-        {props.item}
-      </li>
-      <button
-        onClick={() => {
-          props.onClickDelete(props.id);
-        }}
-      >
-        <DeleteOutlineIcon />
-      </button>
+    <div>
+      {items.length !== 0 ? (
+        items.map((item, index) => (
+          <TodoItem
+            key={uuidv4()}
+            id={item.id}
+            onClickDelete={onDelete}
+            task={item.task}
+            onToggle={onToggle}
+            doneStatus={item.isDone}
+          />
+        ))
+      ) : (
+        <p>No Tasks</p>
+      )}
     </div>
   );
-}
+};
 
-export default TodoItem;
-
-// class TodoItem extends React.Component {
-//   constructor(props) {
-//     super(props);
-//   }
-
-//   render() {
-//     return <h1>this.props.x</h1>;
-//   }
-// }
+export default TodoItems;

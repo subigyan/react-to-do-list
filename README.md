@@ -6,6 +6,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+## `npm run server`
+
+Runs the server.
+Run the server before running the app to store data and fetch data from the db.json file.
+
 ### `npm start`
 
 Runs the app in the development mode.\
